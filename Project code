@@ -1,0 +1,185 @@
+const int LAct1Pin1 = 13;
+const int LAct1Pin2 = 12; 
+
+const int RAct1Pin1 = 11;
+const int RAct1Pin2 = 10;
+
+int enA1 = 22;
+int enB1 = 24; 
+ 
+//-------------------------
+const int LAct2Pin1 = 9;
+const int LAct2Pin2 = 8; 
+
+const int RAct2Pin1 = 7;
+const int RAct2Pin2 = 6;
+
+int enA2 = 30;
+int enB2 = 32;
+  
+//-------------------------
+ 
+const int LAct3Pin1 = 5;
+const int LAct3Pin2 = 4; 
+
+const int RAct3Pin1 = 3;
+const int RAct3Pin2 = 2;
+
+int enA3 = 40;
+int enB3 = 42;
+
+ 
+//-------------------------
+float time = 0; // time as counter, not linked to time on Arduino
+
+const int wavelength = 240; 
+
+float f = 15;
+float T = 1/f;
+float delay_time = (T/512);
+const int x1 = 0; //no displacement
+const int x2 = 20;
+const int x3 = 40;
+const float pi = 3.14159;
+const float k = 2*pi/wavelength;
+const float W = 2*pi*f;
+
+
+void setup() {
+  // put your setup code here, to run once:
+
+Serial.begin(9600); 
+
+  pinMode(enA1, OUTPUT);
+  pinMode(enB1, OUTPUT);
+  
+  pinMode(LAct1Pin1, OUTPUT);
+  pinMode(LAct1Pin2, OUTPUT);
+  pinMode(RAct1Pin1, OUTPUT);
+  pinMode(RAct1Pin2, OUTPUT);
+  //--------------------------
+  pinMode(enA2, OUTPUT);
+  pinMode(enB2, OUTPUT);
+  
+  pinMode(LAct2Pin1, OUTPUT);
+  pinMode(LAct2Pin2, OUTPUT);
+  pinMode(RAct2Pin1, OUTPUT);
+  pinMode(RAct2Pin2, OUTPUT);
+  //--------------------------
+  pinMode(enA3, OUTPUT);
+  pinMode(enB3, OUTPUT);
+  
+  pinMode(LAct3Pin1, OUTPUT);
+  pinMode(LAct3Pin2, OUTPUT);
+  pinMode(RAct3Pin1, OUTPUT);
+  pinMode(RAct3Pin2, OUTPUT);
+
+
+
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+
+    
+    int  A1 = 170*sin(k*x1 - W*time)+85; 
+    int  A2 = 170*sin(k*x2 - W*time)+85;
+    int  A3 = 255*sin(k*x3-W*time);//tail doesnt need x value
+    
+    
+    if (A1 > 0){
+      analogWrite(LAct1Pin1, A1); //extend act1
+      analogWrite(LAct1Pin2, 0);
+      digitalWrite(enA1, 1);
+      digitalWrite(enB1, 0);
+   
+     }
+      else if (A1 < 0){  
+        analogWrite(LAct1Pin1, 0); //retract act1
+        analogWrite(LAct1Pin2, abs(A1));
+        digitalWrite(enA1, 0);
+        digitalWrite(enB1, 1);
+     
+        }
+    if (A1 > 0){
+      analogWrite(RAct1Pin1, A1); //extend act2
+      analogWrite(RAct1Pin2, 0);
+      digitalWrite(enA1, 1);
+      digitalWrite(enB1, 0);
+   
+      }
+      else if (A1 < 0){ 
+        analogWrite(RAct1Pin1, 0); //retract act2 
+        analogWrite(RAct1Pin2, abs(A1));
+        digitalWrite(enA1, 0);
+        digitalWrite(enB1, 1);
+   
+        }
+        
+        
+        if (A2 > 0){
+          analogWrite(LAct2Pin1, A2); //extend act1
+          analogWrite(LAct2Pin2, 0);
+          digitalWrite(enA2, 1);
+          digitalWrite(enB2, 0);
+     
+         }
+          else if (A2 < 0){  
+            analogWrite(LAct2Pin1, 0); //retract act1
+            analogWrite(LAct2Pin2, abs(A2));
+            digitalWrite(enA2, 0);
+            digitalWrite(enB2, 1);
+          
+            }
+        if (A2 > 0){
+          analogWrite(RAct2Pin1, A2); //extend act2
+          analogWrite(RAct2Pin2, 0);
+          digitalWrite(enA2, 1);
+          digitalWrite(enB2, 0);
+     
+          }
+          else if (A2 < 0){ 
+            analogWrite(RAct2Pin1, 0); //retract act2 
+            analogWrite(RAct2Pin2, abs(A2));
+            digitalWrite(enA2, 0);
+            digitalWrite(enB2, 1);
+            delay(delay_time);  
+            }
+
+    
+              if (A3 > 0){
+                analogWrite(LAct3Pin1, abs(A3)); //extend act1
+                analogWrite(LAct3Pin2, 0);
+                digitalWrite(enA3, 1);
+                digitalWrite(enB3, 0);
+              
+               }
+                else if (A3 < 0){  
+                  analogWrite(LAct3Pin1, 0); //retract act1
+                  analogWrite(LAct3Pin2, abs(A3));
+                    
+                  }
+              if (A3 > 0){
+                analogWrite(RAct3Pin1, abs(A3)); //extend act2
+                analogWrite(RAct3Pin2, 0);
+                digitalWrite(enA3, 1);
+                digitalWrite(enB3, 0);
+                
+                }
+                else if (A3 < 0){ 
+                  analogWrite(RAct3Pin1, 0); //retract act2 
+                  analogWrite(RAct3Pin2, abs(A3));
+                  digitalWrite(enA3, 0);
+                  digitalWrite(enB3, 1);
+                  
+                  }
+delay(delay_time);
+
+
+    
+
+time = time +0.001;
+Serial.print(A1);
+Serial.println();
+//Serial.print(delay_time,16);
+//Serial.println();
